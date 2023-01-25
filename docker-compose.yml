@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  dr_web:
+    build:
+      context: ./config/web/
+      dockerfile: Dockerfile
+    container_name: dr_web
+    ports:
+      - 127.0.0.1:8080:80
+    user: "1000:1000"
+    networks:
+      - dr_net
+    volumes:
+      - ./app/:/app/
+      - ./files/:/app/files/
+    working_dir: /app/
+    command:
+      - "/start-reload.sh" #dev only
+networks:
+  dr_net:
+    name: dr_net

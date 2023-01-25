@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <body>
+    <div>
+      <form action="/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <input type="submit" name="submit" />
+      </form>
+    </div>
+    <div>
+      <form action="/delete" method="post" enctype="multipart/form-data">
+        <table>
+          <thead>
+            <th>File list</th>
+            <th>File name</th>
+            <th>Delete? <input type="checkbox" name="delete_all" value="1" /> </th>
+          </thead>
+          <tbody>
+            {% for f in files %}
+            <tr>
+              <td>1</td>
+              <td>
+                <a href="/files/{{f}}" target="__blank">{{ f }}</a>
+              </td>
+              <td>
+                <input type="checkbox" name="delete" value="{{f}}" />
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div>
+          <input type="submit" name="submit" value="Submit"/>
+        </div>
+      </form>
+    </div>
+    <script>
+      document.getElementById("fileList")
+        .addEventListener("click", (e) => {
+          let delBut = e.target;
+          if (!delBut.classList.contains("delete")) {
+            return;
+          }
+          let f = delBut.getAttribute("data-f");
+
+          let data = new FormData();
+          data.set("file", f);
+
+          fetch("/", {
+            "method": "POST",
+            "body": data,
+          })
+            .then((r) => r.json())
+            .then((d) => {
+              console.log(d);
+            })
+        });
+    </script>
+  </body>
+</html>
